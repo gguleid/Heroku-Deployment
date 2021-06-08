@@ -7,6 +7,7 @@ const mongoose = require ('mongoose');
 require('dotenv').config();
 const app = express();
 const db = mongoose.connection;
+const Tea = require('./model/products.js');
 //___________________
 //Port
 //___________________
@@ -48,10 +49,62 @@ app.use(methodOverride('_method'));// allow POST, PUT and DELETE from a form
 //___________________
 // Routes
 //___________________
-//localhost:3000
+//localhost:4007
 app.get('/' , (req, res) => {
   res.send('Hello World!');
 });
+
+// Index - I need to add a "index.ejs"
+
+app.get('/teashop', (req, res) => {
+  Tea.find({}, (error, productTea) => {
+      res.render('index.ejs', {
+         allProducts: productTea,
+          
+          
+      }
+      
+      );
+  });
+});
+
+
+// New
+
+
+
+// Delete
+
+
+
+// Update 
+app.delete('/teashop/:id', (req, res) => {
+  Tea.findByIdAndDelete(req.params.id, (error, deletedTea) => {
+      res.send({success: true});
+      ;
+  });
+});
+
+
+// Create
+app.post('/teashop', (req, res) => {
+ Tea.create(req.body, (error, createTea) => {
+     res.send(createTea);
+     res.redirect('/teashop')
+ });
+});
+
+// Edit
+
+
+
+// Show
+app.get('/teashop/:id', (req, res) => {
+  Tea.findById(req.params.id, (error, selectedTea) => {
+      res.send(selectedTea)
+  });
+});
+
 
 //___________________
 //Listener
